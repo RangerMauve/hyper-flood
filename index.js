@@ -35,7 +35,7 @@ module.exports = class HyperFlood extends EventEmitter {
 
     this.emit('message', data, originId, messageNumber)
 
-    if (!ttl) return debug('Got message with no TTL', originId, messageNumber, ttl)
+    if (ttl <= 0) return debug('Got message at end of TTL', originId, messageNumber, ttl)
 
     const sendMethod = this._ext.broadcast ? 'broadcast' : 'send'
     this._ext[sendMethod]({
