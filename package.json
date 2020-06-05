@@ -1,6 +1,6 @@
 {
   "name": "hyper-flood",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Flooding broadcast using hypercore-protocol extensions",
   "main": "index.js",
   "scripts": {
