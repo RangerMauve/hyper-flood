@@ -1,0 +1,8 @@
+// type=0
+message Packet {
+	required bytes originId = 1;
+	required uint32 messageNumber = 2;
+	required uint32 ttl = 3;
+	required bytes data = 4;
+}
+

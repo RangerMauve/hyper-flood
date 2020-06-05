@@ -1,0 +1,37 @@
+{
+  "name": "hyper-flood",
+  "version": "1.0.0",
+  "description": "Flooding broadcast using hypercore-protocol extensions",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js",
+    "build": "protocol-buffers schema.proto -o messages.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RangerMauve/hyper-flood.git"
+  },
+  "keywords": [
+    "hypercore",
+    "hyper",
+    "flood",
+    "broadcast"
+  ],
+  "author": "rangermauve <ranger@mauve.moe> (https://mauve.moe/)",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/RangerMauve/hyper-flood/issues"
+  },
+  "homepage": "https://github.com/RangerMauve/hyper-flood#readme",
+  "dependencies": {
+    "debug": "^4.1.1",
+    "lru": "^3.1.0",
+    "protocol-buffers-encodings": "^1.1.0"
+  },
+  "devDependencies": {
+    "hypercore": "^9.1.0",
+    "protocol-buffers": "^4.1.2",
+    "random-access-memory": "^3.1.1",
+    "tape": "^5.0.1"
+  }
+}
