@@ -51,17 +51,20 @@ You can listen on messages that show up through the flood with this event.
 
 This gets emitted when there's an error, usually while parsing the message data.
 
-### `flood.broadcast(message)`
+### `flood.broadcast(message, ttl)`
 
 Use this to broadcast out messages into the network.
 
 - `message` should be a `Buffer` to send out to the swarm.
+- `ttl` is optional and will use the TTL specified in the constructor by default.
 
 ### `const extensionHandlers = flood.extension()`
 
 This will create extension handlers for use in hypercore-protocol.
 
 - `extensionHandlers` should be passed to `protocol.registerExtension` or `feed.registerExtension`.
+
+---
 
 ## Credits
 

@@ -57,10 +57,10 @@ module.exports = class HyperFlood extends EventEmitter {
     }
   }
 
-  broadcast (data) {
+  broadcast (data, ttl=this.ttl) {
     if (!this._ext) return debug('Broadcasting without extension')
     this.messageNumber++
-    const { id, messageNumber, ttl } = this
+    const { id, messageNumber } = this
 
     const sendMethod = this._ext.broadcast ? 'broadcast' : 'send'
 
