@@ -56,7 +56,7 @@ This gets emitted when there's an error, usually while parsing the message data.
 Use this to broadcast out messages into the network.
 
 - `message` should be a `Buffer` to send out to the swarm.
-- `ttl` is optional and will use the TTL specified in the constructor by default.
+- `ttl` is optional and will use the TTL specified in the constructor by default. This specifies the number of hops a message will be re-broascasted between peers. Set this to `0` to only reach peers you're directly connected to.
 
 ### `const extensionHandlers = flood.extension()`
 
