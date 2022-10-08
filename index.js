@@ -50,7 +50,8 @@ module.exports = class HyperFlood extends EventEmitter {
       )
     }
 
-    this._ext.broadcast({
+    const sendMethod = this._ext.broadcast ? 'broadcast' : 'send'
+    this._ext[sendMethod]({
       originId,
       messageNumber,
       data,
