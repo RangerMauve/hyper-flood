@@ -12,11 +12,11 @@ const feed = hypercore()
 
 const flood = new HyperFlood()
 
-feed.registerExtension('example', flood.extension())
+flood.extension('example', feed)
 
 flood.on('message', (message) => console.log(message.toString('utf8')))
 
-feed.on('peer-open', () => {
+feed.on('peer-add', () => {
 	flood.broadcast(Buffer.from('Hello World!'))
 })
 ```
@@ -58,11 +58,9 @@ Use this to broadcast out messages into the network.
 - `message` should be a `Buffer` to send out to the swarm.
 - `ttl` is optional and will use the TTL specified in the constructor by default. This specifies the number of hops a message will be re-broascasted between peers. Set this to `0` to only reach peers you're directly connected to.
 
-### `const extensionHandlers = flood.extension()`
+### `flood.extension(extension_name, feed)`
 
-This will create extension handlers for use in hypercore-protocol.
-
-- `extensionHandlers` should be passed to `protocol.registerExtension` or `feed.registerExtension`.
+This will register extension with hypercore-protocol.
 
 ---
 

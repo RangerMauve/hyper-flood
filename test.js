@@ -6,22 +6,22 @@ const HyperFlood = require('./')
 const EXTENSION_NAME = 'example'
 
 test('Broadcast through several peers', (t) => {
-  const peer1 = hypercore(RAM)
+  const peer1 = new hypercore(RAM)
   t.plan(2)
 
-  peer1.ready(() => {
-    const peer2 = hypercore(RAM, peer1.key)
-    const peer3 = hypercore(RAM, peer1.key)
+  peer1.ready().then(() => {
+    const peer2 = new hypercore(RAM, peer1.key)
+    const peer3 = new hypercore(RAM, peer1.key)
 
-    peer2.ready(() => {
-      peer3.ready(() => {
+    peer2.ready().then(() => {
+      peer3.ready().then(() => {
         const flood1 = new HyperFlood()
         const flood2 = new HyperFlood()
         const flood3 = new HyperFlood()
 
-        peer1.registerExtension(EXTENSION_NAME, flood1.extension())
-        peer2.registerExtension(EXTENSION_NAME, flood2.extension())
-        peer3.registerExtension(EXTENSION_NAME, flood3.extension())
+        flood1.extension(EXTENSION_NAME, peer1)
+        flood2.extension(EXTENSION_NAME, peer2)
+        flood3.extension(EXTENSION_NAME, peer3)
 
         const data = Buffer.from('Hello World')
 
@@ -33,7 +33,7 @@ test('Broadcast through several peers', (t) => {
           t.deepEquals(message, data, 'Data got  broadcast')
         })
 
-        peer3.on('peer-open', () => {
+        peer3.on('peer-add', () => {
           flood1.broadcast(data)
         })
 
@@ -45,8 +45,8 @@ test('Broadcast through several peers', (t) => {
 })
 
 function replicate (peer1, peer2) {
-  const stream1 = peer1.replicate(true, { ack: true, live: true })
-  const stream2 = peer2.replicate(false, { ack: true, live: true })
+  const stream1 = peer1.replicate(true)
+  const stream2 = peer2.replicate(false)
 
   stream1.pipe(stream2)
   stream2.pipe(stream1)

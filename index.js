@@ -26,16 +26,29 @@ module.exports = class HyperFlood extends EventEmitter {
 
   _handleMessage ({ originId, messageNumber, ttl, data }) {
     // Ignore messages from ourselves
-    if (originId.equals(this.id)) return debug('Got message from self', originId, messageNumber)
+    if (originId.equals(this.id)) { return debug('Got message from self', originId, messageNumber) }
 
     // Ignore messages we've already seen
     const key = originId.toString('hex') + messageNumber
-    if (this.lru.get(key)) return debug('Got message that was already seen', originId, messageNumber)
+    if (this.lru.get(key)) {
+      return debug(
+        'Got message that was already seen',
+        originId,
+        messageNumber
+      )
+    }
     this.lru.set(key, true)
 
     this.emit('message', data, originId, messageNumber)
 
-    if (ttl <= 0) return debug('Got message at end of TTL', originId, messageNumber, ttl)
+    if (ttl <= 0) {
+      return debug(
+        'Got message at end of TTL',
+        originId,
+        messageNumber,
+        ttl
+      )
+    }
 
     const sendMethod = this._ext.broadcast ? 'broadcast' : 'send'
     this._ext[sendMethod]({
@@ -46,18 +59,15 @@ module.exports = class HyperFlood extends EventEmitter {
     })
   }
 
-  extension () {
-    return (ext) => {
-      this._ext = ext
-      return {
-        encoding: Packet,
-        onmessage: (msg, peer) => this._handleMessage(msg, peer),
-        onerror: (err) => this.emit('error', err)
-      }
-    }
+  extension (extension, feed) {
+    this._ext = feed.registerExtension(extension, {
+      encoding: Packet,
+      onmessage: (msg, peer) => this._handleMessage(msg, peer),
+      onerror: (err) => this.emit('error', err)
+    })
   }
 
-  broadcast (data, ttl=this.ttl) {
+  broadcast (data, ttl = this.ttl) {
     if (!this._ext) return debug('Broadcasting without extension')
     this.messageNumber++
     const { id, messageNumber } = this

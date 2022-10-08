@@ -6,11 +6,11 @@
 /* eslint-disable camelcase */
 
 // Remember to `npm install --save protocol-buffers-encodings`
-var encodings = require('protocol-buffers-encodings')
-var varint = encodings.varint
-var skip = encodings.skip
+const encodings = require('protocol-buffers-encodings')
+const varint = encodings.varint
+const skip = encodings.skip
 
-var Packet = exports.Packet = {
+const Packet = exports.Packet = {
   buffer: true,
   encodingLength: null,
   encode: null,
@@ -25,7 +25,7 @@ function definePacket () {
   Packet.decode = decode
 
   function encodingLength (obj) {
-    var length = 0
+    let length = 0
     if (!defined(obj.originId)) throw new Error("originId is required")
     var len = encodings.bytes.encodingLength(obj.originId)
     length += 1 + len
@@ -44,7 +44,7 @@ function definePacket () {
   function encode (obj, buf, offset) {
     if (!offset) offset = 0
     if (!buf) buf = Buffer.allocUnsafe(encodingLength(obj))
-    var oldOffset = offset
+    const oldOffset = offset
     if (!defined(obj.originId)) throw new Error("originId is required")
     buf[offset++] = 10
     encodings.bytes.encode(obj.originId, buf, offset)
@@ -69,26 +69,26 @@ function definePacket () {
     if (!offset) offset = 0
     if (!end) end = buf.length
     if (!(end <= buf.length && offset <= buf.length)) throw new Error("Decoded message is not valid")
-    var oldOffset = offset
-    var obj = {
+    const oldOffset = offset
+    const obj = {
       originId: null,
       messageNumber: 0,
       ttl: 0,
       data: null
     }
-    var found0 = false
-    var found1 = false
-    var found2 = false
-    var found3 = false
+    let found0 = false
+    let found1 = false
+    let found2 = false
+    let found3 = false
     while (true) {
       if (end <= offset) {
         if (!found0 || !found1 || !found2 || !found3) throw new Error("Decoded message is not valid")
         decode.bytes = offset - oldOffset
         return obj
       }
-      var prefix = varint.decode(buf, offset)
+      const prefix = varint.decode(buf, offset)
       offset += varint.decode.bytes
-      var tag = prefix >> 3
+      const tag = prefix >> 3
       switch (tag) {
         case 1:
         obj.originId = encodings.bytes.decode(buf, offset)
